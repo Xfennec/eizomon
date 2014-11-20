@@ -5,9 +5,9 @@ Small tool and lib to control the current mode for Eizo screens. Allow to a chan
 
 Needs USB connection, but the genuine Eizo is not required.
 
-Depends on [hidapi](https://github.com/signal11/hidapi)
+Depends on [hidapi](https://github.com/signal11/hidapi).
 
-This is a WIP: 
+This is an early WIP: 
  * only for windows
  * only for the Foris FG2421
  * no binary provided
@@ -22,5 +22,5 @@ The project aims to:
  * provide a command line tool
  * provide background application (for shortcuts)
  * supports more screen features (colors, volume, ...)
- 
- This tool is in a very early pre-alpha 0.0.0.1 stage and is the result of some empirical experimentations using reverse engineering from the original tool and driver. Use at your own risk, it can probably set your entire house in fire.
+
+This tool is in a very early pre-alpha 0.0.0.1 stage and is the result of some empirical experimentations using reverse engineering from the original tool and driver. Use at your own risk, it can probably set your entire house in fire.
