@@ -1,6 +1,10 @@
 #ifndef EZMON_EIZO_CTRL
 #define EZMON_EIZO_CTRL
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 /*
    Copyright (C) 2014 Xfennec, CQFD Corp.
 
@@ -46,5 +50,9 @@ typedef struct eizo_ctrl_monitor {
 
 eizo_ctrl_monitor *eizo_ctrl_open(unsigned short vendor_id, unsigned short product_id, const wchar_t *serial_number);
 int eizo_ctrl_command(eizo_ctrl_monitor *monitor, unsigned char command, unsigned char arg1, unsigned char arg2);
+
+#if defined(__cplusplus)
+}
+#endif
 
 #endif
