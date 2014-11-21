@@ -92,7 +92,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\eizo_ctrl.cpp" />
+    <ClCompile Include="..\src\eizo_ctrl.c" />
     <ClCompile Include="eizomon.cpp" />
   </ItemGroup>
   <ItemGroup>
