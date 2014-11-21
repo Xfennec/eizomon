@@ -48,6 +48,7 @@ typedef struct eizo_ctrl_monitor {
     unsigned char backlight_status;
 } eizo_ctrl_monitor;
 
+int eizo_ctrl_detect(unsigned short vendor_id, unsigned short product_id, const wchar_t *serial_number);
 eizo_ctrl_monitor *eizo_ctrl_open(unsigned short vendor_id, unsigned short product_id, const wchar_t *serial_number);
 int eizo_ctrl_command(eizo_ctrl_monitor *monitor, unsigned char command, unsigned char arg1, unsigned char arg2);
 

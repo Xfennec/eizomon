@@ -19,9 +19,53 @@
 #include <stdlib.h>
 #include <string.h>
 
+void eizo_ctrl_internal_close(void)
+{
+    hid_exit();
+}
+
+int eizo_ctrl_internal_init(void)
+{
+    static signed char init_done = 0;
+    if (init_done)
+        return 0;
+
+    if (hid_init())
+        return -1;
+
+    init_done = 1;
+    atexit(eizo_ctrl_internal_close);
+    return 0;
+}
+
+int eizo_ctrl_detect(unsigned short vendor_id, unsigned short product_id, const wchar_t *serial_number)
+{
+    struct hid_device_info *devs, *cur_dev;
+    int count = 0;
+
+    if (eizo_ctrl_internal_init() < 0)
+        return -1;
+
+    devs = hid_enumerate(vendor_id, product_id);
+    cur_dev = devs;
+    while (cur_dev) {
+        // TODO: test serial if !NULL
+        // store cur_dev->vendor_id, cur_dev->product_id somewhere ?
+        count++;
+        cur_dev = cur_dev->next;
+    }
+    hid_free_enumeration(devs);
+
+    return count;
+}
+
 eizo_ctrl_monitor *eizo_ctrl_open(unsigned short vendor_id, unsigned short product_id, const wchar_t *serial_number)
 {
     eizo_ctrl_monitor *monitor;
+
+    if (eizo_ctrl_internal_init() < 0)
+        return NULL;
+
     monitor = (eizo_ctrl_monitor *)malloc(sizeof(eizo_ctrl_monitor));
     if (!monitor)
         return NULL;
