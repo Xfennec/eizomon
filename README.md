@@ -1,7 +1,8 @@
 # Eizomon
 
+Small tool and lib to control the current mode for Eizo screens (Foris FG2421 only, currently).
 
-Small tool and lib to control the current mode for Eizo screens. Allow to a change to a specific mode (User, FPS, RTS, Web) in one shortcut.
+![eizomon, Linux and windows](http://ftp.cqfd-corp.org/eizomon_screen.jpg)
 
 Needs USB connection, but the genuine Eizo tool is not required.
 
@@ -82,6 +83,8 @@ Test with Visual Studio Express 2013 for Desktop:
 ### Usage
 
 Use Ctrl+Shit+Fx (Fx = function key)
+
+![eizomon shortcuts](http://ftp.cqfd-corp.org/eizomon_keys.jpg)
 
 - F1 = User1 mode
 - F2 = User2 mode
