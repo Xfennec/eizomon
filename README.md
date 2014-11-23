@@ -9,7 +9,7 @@ Needs USB connection, but the genuine Eizo tool is not required.
 Depends on [hidapi](https://github.com/signal11/hidapi).
 
 This is an early WIP:
- * windows: application for shortcuts only (Ctrl+Shit+Fx)
+ * Windows: application for shortcuts only (Ctrl+Shit+Fx)
  * Linux: only a small command line tool
  * Mac OS X: nothing
  * only for the Foris FG2421
@@ -19,7 +19,7 @@ This is an early WIP:
  * only mode switch and backlight on/off (Linux supports volume change, too)
 
 The project aims to:
- * be protable (hidapi is available for Linux, Mac, and Windows)
+ * be portable (hidapi is available for Linux, Mac, and Windows)
  * provide a library, exporting simple function to control screens
  * provide a command line tool
  * provide background application (for shortcuts)
@@ -60,6 +60,8 @@ Usage: ./eizomon [-vqdhb] [-m mode]
   -b --backlight on|off   turn the backlight on / off
   -V --volume 0..30       change volume
 ```
+
+Note: Not tested yet, but this tool is probably Windows compliant too, if needed.
 
 ## Windows
 
