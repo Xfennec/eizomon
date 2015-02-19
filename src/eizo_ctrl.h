@@ -29,9 +29,11 @@ extern "C" {
 #define EM_EIZO_FG_2421_PRODUCTID       0x0002
 
 #define EM_EIZO_FG_2421_CMD_COLORTEMP         0x01
+#define EM_EIZO_FG_2421_CMD_BUTTON         	  0x02
 #define EM_EIZO_FG_2421_CMD_MODE              0x03
 #define EM_EIZO_FG_2421_CMD_BLACKLEVEL        0x0c /* 00..64 */
 #define EM_EIZO_FG_2421_CMD_GAMMA             0x0b
+#define EM_EIZO_FG_2421_CMD_SCREENSIZE        0x12
 #define EM_EIZO_FG_2421_CMD_POWERON           0x14
 #define EM_EIZO_FG_2421_CMD_ECOVIEW           0x15
 #define EM_EIZO_FG_2421_CMD_LANGUAGE          0x16
@@ -47,7 +49,8 @@ extern "C" {
 #define EM_EIZO_FG_2421_CMD_COLORGAIN_G       0x3b
 #define EM_EIZO_FG_2421_CMD_COLORGAIN_B       0x3c
 
-#define EM_EIZO_FG_2421_REQ_INPUT             0x18
+#define EM_EIZO_FG_2421_REQ_MODEL             0x17
+#define EM_EIZO_FG_2421_REQ_INPUT             0x18 /* sure ? */
 
 #define EM_EIZO_FG_2421_MODE_USER1      0x16
 #define EM_EIZO_FG_2421_MODE_USER2      0x17
@@ -57,6 +60,24 @@ extern "C" {
 #define EM_EIZO_FG_2421_MODE_RTS        0x2a
 #define EM_EIZO_FG_2421_MODE_WEB        0x2b
 
+#define EM_EIZO_FG_2421_LANG_EN             0x00
+#define EM_EIZO_FG_2421_LANG_DE             0x01
+#define EM_EIZO_FG_2421_LANG_FR             0x02
+#define EM_EIZO_FG_2421_LANG_ES             0x03
+#define EM_EIZO_FG_2421_LANG_IT             0x04
+#define EM_EIZO_FG_2421_LANG_SE             0x05
+#define EM_EIZO_FG_2421_LANG_JP             0x06
+#define EM_EIZO_FG_2421_LANG_ZH_CN          0x06
+#define EM_EIZO_FG_2421_LANG_ZH_TW          0x07
+
+//~ #define EM_EIZO_FG_2421_INPUT_DVI           0x01
+//~ #define EM_EIZO_FG_2421_INPUT_HDMI          0x02
+//~ #define EM_EIZO_FG_2421_INPUT_DISPLAYPORT   0x02 /* hmmm... */
+
+#define EM_EIZO_FG_2421_SCREENSIZE_NORMAL		0x00
+#define EM_EIZO_FG_2421_SCREENSIZE_ENLARGED		0x01
+#define EM_EIZO_FG_2421_SCREENSIZE_FULLSCREEN	0x02
+
 #define EM_EIZO_FG_2421_GAMMA_2_0           0x03
 #define EM_EIZO_FG_2421_GAMMA_2_2           0x04
 #define EM_EIZO_FG_2421_GAMMA_2_4           0x05
@@ -65,15 +86,6 @@ extern "C" {
 #define EM_EIZO_FG_2421_GAMMA_FPS_LOW       0xf6
 #define EM_EIZO_FG_2421_GAMMA_FPS_RTS       0xf7
 #define EM_EIZO_FG_2421_GAMMA_FPS_POWER     0xfc
-
-#define EM_EIZO_FG_2421_LANG_EN             0x00
-#define EM_EIZO_FG_2421_LANG_DE             0x01
-#define EM_EIZO_FG_2421_LANG_FR             0x02
-//~ #define EM_EIZO_FG_2421_LANG_..             0x..
-
-//~ #define EM_EIZO_FG_2421_INPUT_DVI           0x..
-//~ #define EM_EIZO_FG_2421_INPUT_HDMI          0x..
-//~ #define EM_EIZO_FG_2421_INPUT_DISPLAYPORT   0x..
 
 #define EM_EIZO_FG_2421_COLORTEMP_OFF       0x00
 #define EM_EIZO_FG_2421_COLORTEMP_5000K     0x03
@@ -85,8 +97,18 @@ extern "C" {
 #define EM_EIZO_FG_2421_CMD_CONTRASTENHANCE_STANDARD    0x01
 #define EM_EIZO_FG_2421_CMD_CONTRASTENHANCE_ENHANCED    0x02
 
+#define EM_EIZO_FG_2421_BUTTON_UP		0x01
+#define EM_EIZO_FG_2421_BUTTON_DOWN		0x02
+#define EM_EIZO_FG_2421_BUTTON_SIGNAL	0x20
+#define EM_EIZO_FG_2421_BUTTON_POWER	0x80
+
 /*
 - Unknown / To Inspect things:
+0x05: no visible change, if >0, sets 0x06 temporarily:
+	(need to code a mapping generator, here it's only some random tests)
+	0->0, 05/06->ff, 32->ff, cc->80,
+	f6->46, f47->47, f8->32, f9->34, fa->32, fb->31, fc/fd->20, fe->03, ff->17
+	..
 0x06: accepts 00 / 15 (def) / ff, no visible change
 0x09: returns 03 17 (26 bytes total, updates 0x31 too [8 first bytes],
 	G-Ignition seems to detect screen from that)
@@ -95,9 +117,8 @@ extern "C" {
 0x0e: returns ff (no visible change)
 0x0f: (same)
 0x10: (same)
-0x12: screen size (RW?, values?)
 0x13: returns 02 (looks read only)
-0x17: returns model
+0x18: check EM_EIZO_FG_2421_REQ_INPUT (02 for DisplayPort and HDMI... strange)
 0x19: long string, non-text. S/N?
 0x25: returns 24 01 / 18 01 / 14 00 (RW?) seems to change during some cmds
 0x2a: accepts 00 / 10 (def), seems to disable all color correction
@@ -107,6 +128,9 @@ extern "C" {
 0x34: returns 0f 00 31 39 35 35 41 32 ([1955A2] as text). Unknown.
 0x35: accepts 01 / 08 (def) / 09, no visible change
 0x??: pop-up the info screen
+
+- Noop writes
+0x04, 
 */
 
 #define EM_MONITOR_BUFFER_SIZE  3
