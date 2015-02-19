@@ -87,23 +87,26 @@ extern "C" {
 
 /*
 - Unknown / To Inspect things:
-0x06: accepts 00 / 15 (def) / ff, no visisble change
-0x09: returns 03 17 (RW?)
-0x0a: seems related to poweron time
+0x06: accepts 00 / 15 (def) / ff, no visible change
+0x09: returns 03 17 (26 bytes total, updates 0x31 too [8 first bytes],
+	G-Ignition seems to detect screen from that)
+0x0a: seems related to power-on time
 0x0d: accepts 00 / 01 (def), no visible change
-0x0e: returns ff (RW?)
+0x0e: returns ff (no visible change)
 0x0f: (same)
 0x10: (same)
 0x12: screen size (RW?, values?)
-0x13: returns 02 (RW?)
+0x13: returns 02 (looks read only)
 0x17: returns model
 0x19: long string, non-text. S/N?
 0x25: returns 24 01 / 18 01 / 14 00 (RW?) seems to change during some cmds
 0x2a: accepts 00 / 10 (def), seems to disable all color correction
-0x30: returns 2a 17 (RW?)
-0x31: returns 03 17 .. (RW?) See 0x09?
-0x34: returns 0f 00 31 39 35 35 41 32 ([1955A2] as text). Unknow.
+0x30: returns 2a 17 (no visible change)
+0x31: returns 03 17 .. (9 bytes) updated by 0x09. G-Ignition still
+	detects screen after change
+0x34: returns 0f 00 31 39 35 35 41 32 ([1955A2] as text). Unknown.
 0x35: accepts 01 / 08 (def) / 09, no visible change
+0x??: pop-up the info screen
 */
 
 #define EM_MONITOR_BUFFER_SIZE  3
